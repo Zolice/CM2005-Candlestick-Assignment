@@ -1,3 +1,6 @@
+# C++ Compiled Files
+*.exe
+
 # VSCode
 .vscode
 
