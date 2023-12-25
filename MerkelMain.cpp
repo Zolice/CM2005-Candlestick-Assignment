@@ -249,17 +249,17 @@ void MerkelMain::computeCandlesticks(int candlesticksPerProduct)
 	printProgress(0, totalLoopCount, true);
 
 	// Debug: Only compile for 1 singular product to reduce load time.
-	std::string const &p = orderBook.getKnownProducts()[0];
+	// std::string const &p = orderBook.getKnownProducts()[0];
 
 	// Create 2 Candlesticks per product, per timeframe.
-	// for (std::string const &p : orderBook.getKnownProducts())
+	for (std::string const &p : orderBook.getKnownProducts())
 	{
 		// currentTime = orderBook.getEarliestTime();
 		// Create a temporary vector of Candlesticks.
 		std::vector<Candlestick> tempCandlestick;
 
-		double previousAskPrice;
-		double previousBidPrice;
+		double previousAskPrice = 0.0;
+		double previousBidPrice = 0.0;
 
 		// For progress checking
 		timestampLoop = 0;
@@ -380,7 +380,7 @@ void MerkelMain::printProgress(int progress, int total, bool firstIteration)
 	std::cout << "\r";
 
 	// Print the start of the Progress message
-	std::cout << "Progress: " << ceil(percentage) << "% [";
+	std::cout << ((percentage == 100) ? "Completed: " : "Progress: ") << ceil(percentage) << "% [";
 
 	// Print the progress bar.
 	for (int i = 0; i < progressBarCount; i++)
@@ -494,7 +494,7 @@ void MerkelMain::drawCandlesticks(std::vector<Candlestick> candlesticks)
 
 	// Declare the settings of the graph space
 	// paddingX is the number of spaces between the Candlesticks and the left and right edge.
-	int paddingX = 3;
+	int paddingX = 5;
 
 	// paddingY is the number of spaces between the Candlesticks and the top and bottom edge.
 	int paddingY = 1;
@@ -510,21 +510,22 @@ void MerkelMain::drawCandlesticks(std::vector<Candlestick> candlesticks)
 
 	// Declare the settings of the plot itself
 	// gapWidth is the size of the gap between each Candlestick.
-	int gapWidth = 5;
+	int gapWidth = 7;
 
 	// candlestickWidth is the width of each Candlestick. This must be an even number.
-	int candlestickWidth = 5;
+	int candlestickWidth = 7;
 	// Check if candlestickWidth is an even number, and if not, make it an even number.
-	if (candlestickWidth % 2 != 0)
+	if (candlestickWidth % 2 == 0)
 		candlestickWidth++;
 
 	// Calculate the details of the plot.
 	// Calculate the width of the plot, without including the left column.
-	int plotWidth = candlesticks.size() * (candlestickWidth + gapWidth) - gapWidth;
+	int plotWidth = candlesticks.size() * candlestickWidth + (candlesticks.size() - 1) * gapWidth + paddingX * 2;
 
 	// Get the highest and lowest price of the Candlesticks.
 	double highestPrice = 0.0;
 	double lowestPrice = candlesticks[0].low;
+
 	for (Candlestick const &c : candlesticks)
 	{
 		if (c.high > highestPrice)
@@ -560,6 +561,9 @@ void MerkelMain::drawCandlesticks(std::vector<Candlestick> candlesticks)
 		display.push_back(temp);
 	}
 
+	// Store the index of the top of the graph
+	int topIndex = display.size();
+
 	// Draw the Y Axis
 	for (int i = 0; i < yPlotCount; i++)
 	{
@@ -577,11 +581,14 @@ void MerkelMain::drawCandlesticks(std::vector<Candlestick> candlesticks)
 		}
 
 		// Add spaces to the end of the value to make it the same length as the leftColumnWidth
-		for (int i = 0; i <= leftColumnWidth - temp.length(); i++)
+		for (int i = 0; i < leftColumnWidth - temp.length();)
 			temp += " ";
 
 		// Draw the Y Axis
 		temp += "|";
+
+		for (int j = 0; j < paddingX; j++)
+			temp += " ";
 
 		// Add to display
 		display.push_back(temp);
@@ -599,10 +606,16 @@ void MerkelMain::drawCandlesticks(std::vector<Candlestick> candlesticks)
 			// Draw the Y Axis
 			temp += "|";
 
+			for (int k = 0; k < paddingX; k++)
+				temp += " ";
+
 			// Add to display
 			display.push_back(temp);
 		}
 	}
+
+	// Store the index of the bottom of the graph
+	int bottomIndex = display.size() - 1;
 
 	// Draw the bottom padding of the graph
 	for (int i = 0; i < paddingY; i++)
@@ -630,24 +643,29 @@ void MerkelMain::drawCandlesticks(std::vector<Candlestick> candlesticks)
 	// Draw the X axis
 	temp = "";
 	temp = "DATE";
-	std::cout << leftColumnWidth << std::endl;
-	std::cout << temp.length() << std::endl;
-	std::cout << leftColumnWidth - temp.length() << std::endl;
 	for (int i = 0; i < leftColumnWidth - temp.length();)
 	{
-		std::cout << "loop" << i << std::endl;
 		temp += " ";
 	}
 	temp += "|";
 
+	for (int i = 0; i < paddingX; i++)
+		temp += " ";
+
 	// Add to display
 	display.push_back(temp);
+
+	// Save the index of Date to be used later
+	int dateIndex = display.size() - 1;
 
 	// Draw 2nd part of X axis
 	temp = "TIME";
 	for (int i = 0; i < leftColumnWidth - temp.length();)
 		temp += " ";
 	temp += "|";
+
+	for (int i = 0; i < paddingX; i++)
+		temp += " ";
 
 	// Add to display
 	display.push_back(temp);
@@ -658,16 +676,126 @@ void MerkelMain::drawCandlesticks(std::vector<Candlestick> candlesticks)
 		temp += " ";
 	temp += "|";
 
+	for (int i = 0; i < paddingX; i++)
+		temp += " ";
+
 	// Add to display
 	display.push_back(temp);
+
+	// Get the y interval between each line
+	double yInterval = range / ((yPlotCount - 1) * (yPlotGap + 1) + 1);
+
+	// Draw the Candlesticks
+	for (Candlestick &c : candlesticks)
+	{
+		// c.printInformation();
+
+		for (int i = topIndex; i <= bottomIndex; i++)
+		{
+			// Clear temp
+			temp = "";
+
+			double price = highestPrice - (i - topIndex) * yInterval;
+			// Check if the price is within which range of the candlestick.
+			if (price - yInterval / 2 <= c.high && price + yInterval / 2 >= c.low)
+			{
+				// Get the higher/lower price of open/close price
+				double higherPrice = c.open > c.close ? c.open : c.close;
+				double lowerPrice = c.open < c.close ? c.open : c.close;
+
+				// Check if the price is within range of open/close price
+				if (price - yInterval / 2 <= c.open && price + yInterval / 2 >= c.open)
+				{
+					// Draw the open price
+					temp += "|";
+					for (int j = 2; j < candlestickWidth; j++)
+						temp += "#";
+					temp += "|";
+
+					// Draw the gap between candlesticks
+					for (int j = 0; j < gapWidth; j++)
+						temp += " ";
+				}
+				else if (price - yInterval / 2 <= c.close && price + yInterval / 2 >= c.close)
+				{
+					// Draw the close price
+					temp += "|";
+					for (int j = 2; j < candlestickWidth; j++)
+						temp += "#";
+					temp += "|";
+
+					// Draw the gap between candlesticks
+					for (int j = 0; j < gapWidth; j++)
+						temp += " ";
+				}
+				// Check if the price is between open/close price
+				else if (price - yInterval / 2 <= higherPrice && price + yInterval / 2 >= lowerPrice)
+				{
+					// Draw the body of the candlestick
+					temp += "|";
+					for (int j = 2; j < candlestickWidth; j++)
+						temp += " ";
+					temp += "|";
+
+					// Draw the gap between candlesticks
+					for (int j = 0; j < gapWidth; j++)
+						temp += " ";
+				}
+				else
+				{
+					// Draw the body of the candlestick
+					for (int j = 0; j < floor(candlestickWidth / 2); j++)
+						temp += " ";
+
+					temp += "|";
+
+					for (int j = 0; j < floor(candlestickWidth / 2) + gapWidth; j++)
+						temp += " ";
+				}
+			}
+			// If not in range, draw spaces
+			else
+			{
+				for (int j = 0; j < candlestickWidth + gapWidth; j++)
+					temp += " ";
+			}
+
+			// Save changes to display
+			display[i] += temp;
+		}
+
+		// Add the Date, Time and Type
+		// Add the Date
+		temp = c.timestamp.substr(0, 9);
+		for (int i = 0; i < (ceil(candlestickWidth) + gapWidth) - temp.length();)
+			temp += " ";
+
+		// Add to display
+		display[dateIndex] += temp;
+
+		// Add the Time
+		temp = c.timestamp.substr(11, 8);
+		for (int i = 0; i < (ceil(candlestickWidth) + gapWidth) - temp.length();)
+			temp += " ";
+
+		// Add to display
+		display[dateIndex + 1] += temp;
+
+		// Add the Type
+		temp = orderBookTypeToString(c.orderType);
+		for (int i = 0; i < (ceil(candlestickWidth) + gapWidth) - temp.length();)
+			temp += " ";
+
+		// Add to display
+		display[dateIndex + 2] += temp;
+	}
 
 	// Leave a line before drawing the Candlesticks
 	std::cout << std::endl;
 
 	// Print the display array into the console
 	for (std::string const &s : display)
-		std::cout
-			<< s << std::endl;
+		std::cout << s << std::endl;
 }
 
 int MerkelMain::getUserOption()
