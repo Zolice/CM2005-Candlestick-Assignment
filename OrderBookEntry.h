@@ -4,6 +4,23 @@
 
 enum class OrderBookType{bid, ask, unknown, asksale, bidsale};
 
+static std::string orderBookTypeToString(OrderBookType type)
+{
+    switch (type)
+    {
+    case OrderBookType::bid:
+        return "Bid";
+    case OrderBookType::ask:
+        return "Ask";
+    case OrderBookType::asksale:
+        return "Ask Sale";
+    case OrderBookType::bidsale:
+        return "Bid Sale";
+    default:
+        return "Unknown";
+    }
+}
+
 class OrderBookEntry
 {
     public:

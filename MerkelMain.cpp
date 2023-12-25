@@ -15,53 +15,6 @@ void MerkelMain::init()
 
     wallet.insertCurrency("BTC", 10);
 
-    // Create 2 Candlesticks per product, per timeframe.
-    for (std::string const &p : orderBook.getKnownProducts())
-    {
-        currentTime = orderBook.getEarliestTime();
-
-        double previousAskPrice;
-        double previousBidPrice;
-
-        // while (true)
-        {
-            std::cout << "Product: " << p << " at time: " << currentTime << std::endl;
-
-            // Create a Candlestick for asks.
-            std::vector<OrderBookEntry> askOrder = orderBook.getOrders(OrderBookType::ask, p, currentTime);
-            Candlestick c1(askOrder);
-
-            // Set the open price of the Candlestick to the previous ask price.
-            // If there is no previous ask price, set the open price to the close price.
-            c1.SetOpenPrice(previousAskPrice == 0.0 ? c1.Close : previousAskPrice);
-            previousAskPrice = c1.Close;
-            c1.PrintInformation();
-
-            // Add the Candlestick to the vector of Candlesticks.
-            candlesticks.push_back(c1);
-
-            // Create a Candlestick for bids.
-            std::vector<OrderBookEntry> bidOrder = orderBook.getOrders(OrderBookType::bid, p, currentTime);
-            Candlestick c2(bidOrder);
-
-            // Set the open price of the Candlestick to the previous bid price.
-            // If there is no previous bid price, set the open price to the close price.
-            c2.SetOpenPrice(previousBidPrice == 0.0 ? c2.Close : previousBidPrice);
-            previousBidPrice = c2.Close;
-            c1.PrintInformation();
-
-            // Add the Candlestick to the vector of Candlesticks.
-            candlesticks.push_back(c2);
-
-            // Update currentTime to the next timeframe.
-            currentTime = orderBook.getNextTime(currentTime);
-
-            // If currentTime resets to earliestTime, break out of the loop.
-            if (currentTime == orderBook.getEarliestTime())
-                break;
-        }
-    }
-
     while (true)
     {
         printMenu();
@@ -84,10 +37,19 @@ void MerkelMain::printMenu()
     std::cout << "5: Print wallet " << std::endl;
     // 6 continue
     std::cout << "6: Continue " << std::endl;
+    // 7: compute Candlesticks using given dataset
+    std::cout << "7: Compute Candlesticks using given dataset (Task 1)" << std::endl;
+    // 8: Draw Candlesticks Plot using given dataset
+    std::cout << "8: Draw Candlesticks Plot using given dataset (Task 2)" << std::endl;
+    // 9: Compute Candlesticks using another dataset
+    std::cout << "9: Compute Candlesticks using another dataset (Task 3)" << std::endl;
+    // 10: Draw Candlesticks Graph using another dataset
+    std::cout << "10: Draw Candlesticks Graph using another dataset (Task 3)" << std::endl;
 
     std::cout << "============== " << std::endl;
 
-    std::cout << "Current time is: " << currentTime << std::endl;
+    // Avoid printing current time here as it isn't updated. s
+    // std::cout << "Current time is: " << currentTime << std::endl;
 }
 
 void MerkelMain::printHelp()
@@ -229,6 +191,140 @@ void MerkelMain::gotoNextTimeframe()
     currentTime = orderBook.getNextTime(currentTime);
 }
 
+/**
+ * @brief Computes the Candlesticks for each product, for each timeframe.
+ * This function will take a long time to run, as it has to loop through every product and timeframe. 
+ * 
+ * @param candlesticksPerProduct specifies the number of candlesticks to be generated per Product/ProductType. 
+ * If the value is set to 2, two candlesticks will be created for each distinct Product/ProductType. 
+ * This parameter controls the granularity of the candlestick generation, influencing the number of 
+ * candlesticks associated with each unique Product/ProductType.
+ */
+void MerkelMain::computeCandlesticks(int candlesticksPerProduct)
+{
+    // Set default value for candlesticksPerProduct if it is less than 1.
+    if(candlesticksPerProduct < 1) candlesticksPerProduct = orderBook.totalTimestampCount; 
+
+    // As this function takes a long time to run, we will add a progress meter to the console. 
+    // This will be done by counting the total number of times the loop will run, and then
+    // printing a message every 5% of the way through the loop.
+    // As this depends heavily on std::cout remaining open and unused by other functions,
+    // Do not run any std::cout within the loops of this function.
+    int totalLoopCount = orderBook.getKnownProducts().size() * candlesticksPerProduct;
+
+    // Count the number of products that has completed the loop.
+    int productLoop = 0;
+
+    // Count the number of timestamps that has completed the loop.
+    int timestampLoop = 0;
+    // Start the progress meter.
+    printProgress(0, totalLoopCount, true);
+
+    // Debug: Only compile for 1 singular product to reduce load time.
+    std::string const &p = orderBook.getKnownProducts()[0];
+
+    // Create 2 Candlesticks per product, per timeframe.
+    // for (std::string const &p : orderBook.getKnownProducts())
+    {
+        currentTime = orderBook.getEarliestTime();
+
+        double previousAskPrice;
+        double previousBidPrice;
+
+        // For progress checking
+        timestampLoop = 0;
+
+        while (true)
+        {
+            // Create a Candlestick for asks.
+            std::vector<OrderBookEntry> askOrder = orderBook.getOrders(OrderBookType::ask, p, currentTime);
+            Candlestick c1(askOrder);
+
+            // Set the open price of the Candlestick to the previous ask price.
+            // If there is no previous ask price, set the open price to the close price.
+            c1.setOpenPrice(previousAskPrice == 0.0 ? c1.close : previousAskPrice);
+            previousAskPrice = c1.close;
+            // c1.printInformation();
+
+            // Add the Candlestick to the vector of Candlesticks.
+            candlesticks.push_back(c1);
+
+            // Create a Candlestick for bids.
+            std::vector<OrderBookEntry> bidOrder = orderBook.getOrders(OrderBookType::bid, p, currentTime);
+            Candlestick c2(bidOrder);
+
+            // Set the open price of the Candlestick to the previous bid price.
+            // If there is no previous bid price, set the open price to the close price.
+            c2.setOpenPrice(previousBidPrice == 0.0 ? c2.close : previousBidPrice);
+            previousBidPrice = c2.close;
+            // c2.printInformation();
+
+            // Add the Candlestick to the vector of Candlesticks.
+            candlesticks.push_back(c2);
+
+            // Update the timestampLoop counter.
+            timestampLoop++;
+
+            // Print the progress meter every 5% of the way through the loop.
+            printProgress(productLoop * candlesticksPerProduct + timestampLoop, totalLoopCount, false);
+
+            // Update currentTime to the next timeframe.
+            currentTime = orderBook.getNextTime(currentTime);
+
+            // If currentTime resets to earliestTime, break out of the loop.
+            if (currentTime == orderBook.getEarliestTime()) 
+                break;
+        }
+
+        // Update the productLoop counter.
+        productLoop++;
+    }
+
+    // Print the progress meter one last time, at 100%. 
+    printProgress(1, 1, false);
+
+    // Close the std::cout
+    std::cout << std::endl;
+}
+
+/**
+ * @brief Prints a progress meter to the console.
+ * 
+ * @param progress The current progress.
+ * @param total The total number of times the loop will run.
+ * @param firstIteration Whether this is the first iteration of the loop.
+ */
+void MerkelMain::printProgress(int progress, int total, bool firstIteration) {
+    if(total == 0) return; // Prevent division by zero.
+
+    // If this is the first iteration, print a message.
+    if (firstIteration) {
+        std::cout << "Progress: 0% [------------------]";
+    }
+
+    // Calculate the percentage of the progress.
+    double percentage = (progress * 100) / total;
+
+    // Move the cursor to the beginning of the line.
+    std::cout << "\r";
+
+    // Print the start of the Progress message
+    std::cout << "Progress: " << percentage << "% [";
+
+    // Print the progress bar.
+    for (int i = 0; i < 20; i++) {
+        if (i < (percentage / 5)) {
+            std::cout << "#";
+        }
+        else {
+            std::cout << "-";
+        }
+    }
+
+    // Print the end of the Progress message
+    std::cout << "]";
+}
+
 int MerkelMain::getUserOption()
 {
     int userOption = 0;
@@ -276,5 +372,9 @@ void MerkelMain::processUserOption(int userOption)
     if (userOption == 6)
     {
         gotoNextTimeframe();
+    }
+    if (userOption == 7)
+    {
+        computeCandlesticks(0);
     }
 }

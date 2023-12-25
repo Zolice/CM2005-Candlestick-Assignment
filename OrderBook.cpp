@@ -3,12 +3,14 @@
 #include <map>
 #include <algorithm>
 #include <iostream>
+#include <set>
 
 
 /** construct, reading a csv data file */
 OrderBook::OrderBook(std::string filename)
 {
     orders = CSVReader::readCSV(filename);
+    totalTimestampCount = getTotalTimestampCount();
 }
 
 /** return vector of all know products in the dataset*/
@@ -92,6 +94,25 @@ std::string OrderBook::getNextTime(std::string timestamp)
         next_timestamp = orders[0].timestamp;
     }
     return next_timestamp;
+}
+
+/**
+ * @brief Get the number of unique timestamps in the order book.
+ * Additionally, store the timestamps in a set `allTimestamps` for later use.
+ * 
+ * @return int
+ */
+int OrderBook::getTotalTimestampCount(){
+    // Clear all previous entries in the set.
+    allTimestamps.clear();
+    
+    // Iterate through the orders and add the timestamps to the set.
+    for (OrderBookEntry &e : orders)
+    {
+        allTimestamps.insert(e.timestamp);
+    }
+
+    return allTimestamps.size();
 }
 
 void OrderBook::insertOrder(OrderBookEntry& order)

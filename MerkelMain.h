@@ -22,6 +22,8 @@ private:
     void printWallet();
     void gotoNextTimeframe();
     int getUserOption();
+    void computeCandlesticks(int candlesticksPerProduct);
+    void printProgress(int progress, int total, bool firsIteration);
     void processUserOption(int userOption);
 
     std::string currentTime;

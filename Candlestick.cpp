@@ -9,45 +9,39 @@ Candlestick::Candlestick()
 
 Candlestick::Candlestick(std::vector<OrderBookEntry> &orders)
 {
-    AddOrders(orders);
+    addOrders(orders);
 }
 
-void Candlestick::AddOrders(std::vector<OrderBookEntry> &orders)
+void Candlestick::addOrders(std::vector<OrderBookEntry> &orders)
 {
     if (orders.empty())
         return; // if there are no orders, return
 
-    // Add all orders to _orders
-    for (OrderBookEntry &e : orders)
-    {
-        _orders.push_back(e);
-    }
-
     // Set other Information
-    Timestamp = orders[0].timestamp;
-    Product = orders[0].product;
-    OrderType = orders[0].orderType;
+    timestamp = orders[0].timestamp;
+    product = orders[0].product;
+    orderType = orders[0].orderType;
 
     // Calculate the Open, Close, High, and Low prices
     // Open = computeOpenPrice();
-    Close = computeClosePrice();
-    High = computeHighPrice();
-    Low = computeLowPrice();
+    close = computeClosePrice(orders);
+    high = computeHighPrice(orders);
+    low = computeLowPrice(orders);
 }
 
 /**
  * @brief Prints the Candlestick's information to the console.
- * 
+ *
  */
-void Candlestick::PrintInformation()
+void Candlestick::printInformation()
 {
-    std::cout << "Timestamp: " << Timestamp << std::endl;
-    std::cout << "Product: " << Product << std::endl;
-    // std::cout << "OrderType: " << OrderType << std::endl;
-    std::cout << "Open: " << Open << std::endl;
-    std::cout << "Close: " << Close << std::endl;
-    std::cout << "High: " << High << std::endl;
-    std::cout << "Low: " << Low << std::endl;
+    std::cout << "Timestamp: " << timestamp << std::endl;
+    std::cout << "Product: " << product << " (" << orderBookTypeToString(orderType) << ")" << std::endl;
+    // std::cout << "OrderType: " << orderBookTypeToString(orderType) << std::endl;
+    std::cout << "Open: " << open << std::endl;
+    std::cout << "Close: " << close << std::endl;
+    std::cout << "High: " << high << std::endl;
+    std::cout << "Low: " << low << std::endl;
 }
 
 /**
@@ -56,9 +50,9 @@ void Candlestick::PrintInformation()
  *
  * @param openPrice
  */
-void Candlestick::SetOpenPrice(double openPrice)
+void Candlestick::setOpenPrice(double openPrice)
 {
-    Open = openPrice;
+    open = openPrice;
 }
 
 /**
@@ -67,7 +61,7 @@ void Candlestick::SetOpenPrice(double openPrice)
  *
  * @return Open Price
  */
-double Candlestick::computeOpenPrice()
+double Candlestick::computeOpenPrice(std::vector<OrderBookEntry> &orders)
 {
     return 0.0;
 }
@@ -78,26 +72,26 @@ double Candlestick::computeOpenPrice()
  *
  * @return Close Price
  */
-double Candlestick::computeClosePrice()
+double Candlestick::computeClosePrice(std::vector<OrderBookEntry> &orders)
 {
-    if (_orders.empty())
+    if (orders.empty())
         return 0.0; // if there are no orders, return 0.0
 
     // Get the total price and count
     double totalPrice = 0.0;
     int count = 0;
 
-    for (OrderBookEntry &e : _orders)
+    for (OrderBookEntry &e : orders)
     {
         totalPrice += e.price;
         count++;
     }
 
     // Store the average price per unit in Close
-    Close = totalPrice / count;
+    close = totalPrice / count;
 
     // Return Close value
-    return Close;
+    return close;
 }
 
 /**
@@ -106,25 +100,25 @@ double Candlestick::computeClosePrice()
  *
  * @return High Price
  */
-double Candlestick::computeHighPrice()
+double Candlestick::computeHighPrice(std::vector<OrderBookEntry> &orders)
 {
-    if (_orders.empty())
+    if (orders.empty())
         return 0.0; // if there are no orders, return 0.0
 
     // Get the highest price
-    double highestPrice = _orders[0].price;
+    double highestPrice = orders[0].price;
 
-    for (OrderBookEntry &e : _orders)
+    for (OrderBookEntry &e : orders)
     {
         if (e.price > highestPrice)
             highestPrice = e.price;
     }
 
     // Store the highest price in High
-    High = highestPrice;
+    high = highestPrice;
 
     // Return High value
-    return High;
+    return high;
 }
 
 /**
@@ -133,23 +127,23 @@ double Candlestick::computeHighPrice()
  *
  * @return Low Price
  */
-double Candlestick::computeLowPrice()
+double Candlestick::computeLowPrice(std::vector<OrderBookEntry> &orders)
 {
-    if (_orders.empty())
+    if (orders.empty())
         return 0.0; // if there are no orders, return 0.0
 
     // Get the lowest price
-    double lowestPrice = _orders[0].price;
+    double lowestPrice = orders[0].price;
 
-    for (OrderBookEntry &e : _orders)
+    for (OrderBookEntry &e : orders)
     {
         if (e.price < lowestPrice)
             lowestPrice = e.price;
     }
 
     // Store the lowest price in Low
-    Low = lowestPrice;
+    low = lowestPrice;
 
     // Return Low value
-    return Low;
+    return low;
 }
