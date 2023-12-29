@@ -5,6 +5,7 @@
 #include "OrderBook.h"
 #include "Wallet.h"
 #include "Candlestick.h"
+#include "CandlestickBook.h"
 
 class MerkelMain
 {
@@ -23,7 +24,7 @@ private:
     void gotoNextTimeframe();
     int getUserOption();
     void computeCandlesticks(int candlesticksPerProduct);
-    void computeCustomCandlesticks(int candlesticksPerProduct);
+    void computeCustomCandlesticks(); // int candlesticksPerProduct
     void printProgress(int progress, int total, bool firsIteration);
     void requestCandlesticks();
     void requestCustomCandlesticks();
@@ -34,7 +35,9 @@ private:
 
     OrderBook orderBook{"20200317.csv"};
     // OrderBook orderBook{"20200601.csv"};
+    CandlestickBook candlestickBook{"WEOS-USD.csv"};
     Wallet wallet;
 
     std::vector<std::vector<Candlestick>> candlesticks;
+    std::vector<Candlestick> customCandlesticks;
 };

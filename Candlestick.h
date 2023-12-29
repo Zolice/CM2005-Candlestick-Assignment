@@ -16,10 +16,13 @@ public:
     double close;
     double high;
     double low;
+    double volume;
 
     Candlestick();
 
     Candlestick(std::vector<OrderBookEntry> &orders);
+
+    void setValues(double open, double close, double high, double low, double volume, std::string timestamp, std::string product, OrderBookType orderType);
 
     void addOrders(std::vector<OrderBookEntry> &orders);
 

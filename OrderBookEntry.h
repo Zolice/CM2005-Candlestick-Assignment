@@ -2,7 +2,7 @@
 
 #include <string>
 
-enum class OrderBookType{bid, ask, unknown, asksale, bidsale};
+enum class OrderBookType{bid, ask, unknown, asksale, bidsale, transaction};
 
 static std::string orderBookTypeToString(OrderBookType type)
 {
@@ -16,6 +16,8 @@ static std::string orderBookTypeToString(OrderBookType type)
         return "Ask Sale";
     case OrderBookType::bidsale:
         return "Bid Sale";
+    case OrderBookType::transaction:
+        return "Trans";
     default:
         return "Unknown";
     }

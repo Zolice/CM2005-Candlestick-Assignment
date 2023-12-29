@@ -351,6 +351,41 @@ void MerkelMain::computeCandlesticks(int candlesticksPerProduct)
 	std::cout << std::endl;
 }
 
+void MerkelMain::computeCustomCandlesticks()
+{
+	// Verify candlestickBook is not empty
+	if (candlestickBook.allTimestamps.empty())
+	{
+		std::cout << "No Candlesticks to display!" << std::endl;
+		return;
+	}
+
+	// Ask the user for the number of Candlesticks to be generated
+	std::cout << "\nEnter the number of Candlesticks to be generated: ";
+
+	// Get user input
+	std::string input;
+	std::getline(std::cin, input);
+	int candlesticksPerProduct;
+	try
+	{
+		candlesticksPerProduct = std::stoi(input);
+	}
+	catch (const std::exception &e)
+	{
+		std::cout << "Invalid input!" << std::endl;
+		return;
+	}
+
+	// Adjust the CandlestickBook to contain the desired number of Candlesticks
+	candlestickBook.ReduceCandlesticks(candlesticksPerProduct);
+
+	for (Candlestick &cs : candlestickBook.candlesticks)
+	{
+		cs.printInformation();
+	}
+}
+
 /**
  * @brief Prints a progress meter to the console.
  *
@@ -367,10 +402,10 @@ void MerkelMain::printProgress(int progress, int total, bool firstIteration)
 	double progressBarCount = 30;
 	double progressAmount = 100 / progressBarCount;
 
-	// If this is the first iteration, print a message.
+	// If this is the first iteration, open the std::cout.
 	if (firstIteration)
 	{
-		std::cout << "Progress: 0% [------------------]";
+		std::cout << "";
 	}
 
 	// Calculate the percentage of the progress.
@@ -399,6 +434,10 @@ void MerkelMain::printProgress(int progress, int total, bool firstIteration)
 	std::cout << "]";
 }
 
+/**
+ * @brief Asks the user on which product to display Candlesticks.
+ *
+ */
 void MerkelMain::requestCandlesticks()
 {
 	// Check if there are any Candlesticks to display.
@@ -470,6 +509,42 @@ void MerkelMain::requestCandlesticks()
 }
 
 /**
+ * @brief Prepares the Candlesticks for custom product to be drawn.
+ *
+ */
+void MerkelMain::requestCustomCandlesticks()
+{
+	std::cout << "Hello" << std::endl;
+	std::cout << candlestickBook.candlesticks.size() << std::endl;
+	// Check if there are any Candlesticks to display.
+	if (candlestickBook.candlesticks.size() <= 0)
+	{
+		std::cout << "\nNo Candlesticks to display!" << std::endl;
+
+		// Check if the user wants to compute Candlesticks.
+		std::cout << "Compute Candlesticks first? (Y/N): ";
+
+		// Get user input
+		std::string input;
+		std::getline(std::cin, input);
+
+		// Check if the user wants to compute Candlesticks.
+		if (input == "Y" || input == "y")
+		{
+			// Compute Candlesticks
+			computeCustomCandlesticks();
+		}
+		else
+		{
+			// Return to main menu
+			return;
+		}
+	}
+	// Draw the Candlesticks
+	drawCandlesticks(candlestickBook.candlesticks);
+}
+
+/**
  * @brief Draws a text-based graph of the Candlesticks.
  *
  * @param candlesticks vector of Candlesticks to be drawn.
@@ -483,6 +558,12 @@ void MerkelMain::drawCandlesticks(std::vector<Candlestick> candlesticks)
 
 		// As this error is code related, we will not ask the user to compute Candlesticks.
 		// Return to main menu
+		return;
+	}
+
+	if (candlesticks.size() >= 15)
+	{
+		std::cout << "Too many candlesticks to display!" << std::endl;
 		return;
 	}
 
@@ -766,7 +847,14 @@ void MerkelMain::drawCandlesticks(std::vector<Candlestick> candlesticks)
 
 		// Add the Date, Time and Type
 		// Add the Date
-		temp = c.timestamp.substr(0, 9);
+		// Check if the timestamp is long enough to contain the date
+		if (c.timestamp.length() < 10)
+			// If it's too short, use the entire timestamp instead. 
+			temp = c.timestamp;
+		else
+			temp = c.timestamp.substr(0, 9);
+
+		
 		for (int i = 0; i < (ceil(candlestickWidth) + gapWidth) - temp.length();)
 			temp += " ";
 
@@ -774,7 +862,12 @@ void MerkelMain::drawCandlesticks(std::vector<Candlestick> candlesticks)
 		display[dateIndex] += temp;
 
 		// Add the Time
-		temp = c.timestamp.substr(11, 8);
+		// Check if the timestamp is long enough to contain the time
+		if (c.timestamp.length() < 11)
+			temp = "";
+		else
+			temp = c.timestamp.substr(11, 8);
+
 		for (int i = 0; i < (ceil(candlestickWidth) + gapWidth) - temp.length();)
 			temp += " ";
 
@@ -853,5 +946,13 @@ void MerkelMain::processUserOption(int userOption)
 	if (userOption == 8)
 	{
 		requestCandlesticks();
+	}
+	if (userOption == 9)
+	{
+		computeCustomCandlesticks();
+	}
+	if (userOption == 10)
+	{
+		requestCustomCandlesticks();
 	}
 }

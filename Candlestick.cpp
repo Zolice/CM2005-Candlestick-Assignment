@@ -12,6 +12,18 @@ Candlestick::Candlestick(std::vector<OrderBookEntry> &orders)
     addOrders(orders);
 }
 
+void Candlestick::setValues(double open, double close, double high, double low, double volume, std::string timestamp, std::string product, OrderBookType orderType)
+{
+    this->open = open;
+    this->close = close;
+    this->high = high;
+    this->low = low;
+    this->volume = volume;
+    this->timestamp = timestamp;
+    this->product = product;
+    this->orderType = orderType;
+}
+
 void Candlestick::addOrders(std::vector<OrderBookEntry> &orders)
 {
     if (orders.empty())
