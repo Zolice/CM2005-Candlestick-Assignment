@@ -33,8 +33,8 @@ private:
 
     std::string currentTime;
 
-    OrderBook orderBook{"20200317.csv"};
-    // OrderBook orderBook{"20200601.csv"};
+    // OrderBook orderBook{"20200317.csv"};
+    OrderBook orderBook{"20200601.csv"};
     CandlestickBook candlestickBook{"WEOS-USD.csv"};
     Wallet wallet;
 

@@ -123,7 +123,7 @@ Candlestick CSVReader::stringsToCS(std::vector<std::string> tokens, std::string 
         throw;
     }
     Candlestick cs;
-    cs.setValues(open, close, high, low, volume, tokens[4], product, orderType);
+    cs.setValues(open, close, high, low, volume, tokens[0], product, orderType);
 
     return cs;
 }

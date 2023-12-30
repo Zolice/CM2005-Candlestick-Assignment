@@ -575,7 +575,7 @@ void MerkelMain::drawCandlesticks(std::vector<Candlestick> candlesticks)
 
 	// Declare the settings of the graph space
 	// paddingX is the number of spaces between the Candlesticks and the left and right edge.
-	int paddingX = 5;
+	int paddingX = 3;
 
 	// paddingY is the number of spaces between the Candlesticks and the top and bottom edge.
 	int paddingY = 1;
@@ -584,10 +584,10 @@ void MerkelMain::drawCandlesticks(std::vector<Candlestick> candlesticks)
 	int leftColumnWidth = 9;
 
 	// yPlotCount is the number of plotted price values on the left
-	int yPlotCount = 5;
+	int yPlotCount = 8;
 
 	// yPlotGap is the interval between each plotted price value on the left
-	int yPlotGap = 2;
+	int yPlotGap = 4;
 
 	// Declare the settings of the plot itself
 	// gapWidth is the size of the gap between each Candlestick.
