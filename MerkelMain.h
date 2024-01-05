@@ -29,6 +29,7 @@ private:
     void requestCandlesticks();
     void requestCustomCandlesticks();
     void drawCandlesticks(std::vector<Candlestick> candlesticks);
+    void writeToFile(const std::vector<std::string> &data, const std::string &filename);
     void processUserOption(int userOption);
 
     std::string currentTime;
@@ -39,5 +40,7 @@ private:
     Wallet wallet;
 
     std::vector<std::vector<Candlestick>> candlesticks;
-    std::vector<Candlestick> customCandlesticks;
+    // std::vector<Candlestick> customCandlesticks;
+
+    std::vector<Candlestick> backup;
 };

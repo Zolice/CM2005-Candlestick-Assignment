@@ -7,7 +7,6 @@
 CandlestickBook::CandlestickBook(std::string filename)
 {
     candlesticks = CSVReader::readCSV(filename, "WEOS/USD", OrderBookType::transaction);
-    std::cout << "Hello";
 
     totalTimestampCount = getTotalTimestampCount();
 }
@@ -39,7 +38,6 @@ std::string CandlestickBook::getEarliestTime()
 
 int CandlestickBook::getTotalTimestampCount()
 {
-    std::cout << "Hello";
     std::set<std::string> timestamps;
     for (Candlestick &e : candlesticks)
     {
@@ -61,7 +59,7 @@ void CandlestickBook::ReduceCandlesticks(int count) {
         return; // If the count is greater than the number of candlesticks, return.
     
     // Get the number of candlesticks to merge into one. 
-    int mergeCount = ceil(totalTimestampCount / count);
+    int mergeCount = ceil(candlesticks.size() / static_cast<double>(count));
 
     // Create a new vector to store the new merged candlesticks
     std::vector<Candlestick> csb;
@@ -79,7 +77,7 @@ void CandlestickBook::ReduceCandlesticks(int count) {
         double totalCost = candlesticks[i].volume * candlesticks[i].close;
 
         // For each available candlesticks to merge within the range, add the data to the variables.
-        for (int j = i; j < i + mergeCount; j++) {
+        for (int j = i + 1; j < i + mergeCount; j++) {
             if (j >= candlesticks.size())
                 break; // If the index is out of range, break. 
             if (candlesticks[j].high > high)

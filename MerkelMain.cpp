@@ -3,6 +3,7 @@
 #include <vector>
 #include <set>
 #include <cmath>
+#include <fstream>
 
 #include "OrderBookEntry.h"
 #include "CSVReader.h"
@@ -360,8 +361,22 @@ void MerkelMain::computeCustomCandlesticks()
 		return;
 	}
 
+	// Check if there's a backup
+	if (backup.size() == 0)
+	{
+		// Backup the candlesticks
+		backup = candlestickBook.candlesticks;
+	}
+	else
+	{
+		// Restore the backup first
+		candlestickBook.candlesticks = backup;
+	}
+
 	// Ask the user for the number of Candlesticks to be generated
 	std::cout << "\nEnter the number of Candlesticks to be generated: ";
+
+	std::cout << candlestickBook.candlesticks.size() << std::endl;
 
 	// Get user input
 	std::string input;
@@ -514,8 +529,6 @@ void MerkelMain::requestCandlesticks()
  */
 void MerkelMain::requestCustomCandlesticks()
 {
-	std::cout << "Hello" << std::endl;
-	std::cout << candlestickBook.candlesticks.size() << std::endl;
 	// Check if there are any Candlesticks to display.
 	if (candlestickBook.candlesticks.size() <= 0)
 	{
@@ -787,22 +800,47 @@ void MerkelMain::drawCandlesticks(std::vector<Candlestick> candlesticks)
 				// Check if the price is within range of open/close price
 				if (price - yInterval / 2 <= c.open && price + yInterval / 2 >= c.open)
 				{
-					// Draw the open price
-					temp += "|";
-					for (int j = 2; j < candlestickWidth; j++)
-						temp += "#";
-					temp += "|";
+					// Check if the price is within range of close price as well
+					if (price - yInterval / 2 <= c.close && price + yInterval / 2 >= c.close && c.open < c.close)
+					{
+						// Draw the open price
+						temp += "|";
+						for (int j = 2; j < candlestickWidth; j++)
+							temp += "+";
+						temp += "|";
 
-					// Draw the gap between candlesticks
-					for (int j = 0; j < gapWidth; j++)
-						temp += " ";
+						// Draw the gap between candlesticks
+						for (int j = 0; j < gapWidth; j++)
+							temp += " ";
+					}
+					else
+					{
+						// Draw the open price
+						temp += "|";
+						for (int j = 2; j < candlestickWidth; j++)
+							temp += "+";
+						temp += "|";
+
+						// Draw the gap between candlesticks
+						for (int j = 0; j < gapWidth; j++)
+							temp += " ";
+					}
+					// // Draw the open price
+					// temp += "|";
+					// for (int j = 2; j < candlestickWidth; j++)
+					// 	temp += "+";
+					// temp += "|";
+
+					// // Draw the gap between candlesticks
+					// for (int j = 0; j < gapWidth; j++)
+					// 	temp += " ";
 				}
 				else if (price - yInterval / 2 <= c.close && price + yInterval / 2 >= c.close)
 				{
 					// Draw the close price
 					temp += "|";
 					for (int j = 2; j < candlestickWidth; j++)
-						temp += "#";
+						temp += "-";
 					temp += "|";
 
 					// Draw the gap between candlesticks
@@ -849,12 +887,11 @@ void MerkelMain::drawCandlesticks(std::vector<Candlestick> candlesticks)
 		// Add the Date
 		// Check if the timestamp is long enough to contain the date
 		if (c.timestamp.length() < 10)
-			// If it's too short, use the entire timestamp instead. 
+			// If it's too short, use the entire timestamp instead.
 			temp = c.timestamp;
 		else
 			temp = c.timestamp.substr(0, 9);
 
-		
 		for (int i = 0; i < (ceil(candlestickWidth) + gapWidth) - temp.length();)
 			temp += " ";
 
@@ -889,6 +926,36 @@ void MerkelMain::drawCandlesticks(std::vector<Candlestick> candlesticks)
 	// Print the display array into the console
 	for (std::string const &s : display)
 		std::cout << s << std::endl;
+
+	// Save the display array into a file
+	writeToFile(display, "Candlesticks.txt");
+}
+
+/**
+ * @brief Write a vector of strings into an output file.
+ *
+ * @param data std::vector<std::string> to be written into the file.
+ * @param filename Name of the file to be written into.
+ */
+void MerkelMain::writeToFile(const std::vector<std::string> &data, const std::string &filename)
+{
+	// Open the file
+	std::ofstream outputFile(filename, std::ios::out | std::ios::trunc);
+
+	if (outputFile.is_open())
+	{
+		for (const std::string &line : data)
+		{
+			outputFile << line << '\n';
+		}
+
+		outputFile.close();
+		std::cout << "\nData successfully written to " << filename << std::endl;
+	}
+	else
+	{
+		std::cerr << "Unable to open file: " << filename << std::endl;
+	}
 }
 
 int MerkelMain::getUserOption()
