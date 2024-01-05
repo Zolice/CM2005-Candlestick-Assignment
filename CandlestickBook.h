@@ -1,3 +1,5 @@
+// Start of Original Code without Assistance
+
 #pragma once
 
 #include <string>
@@ -27,3 +29,5 @@ public:
 
     private: 
 };
+
+// End of Original Code without Assistance

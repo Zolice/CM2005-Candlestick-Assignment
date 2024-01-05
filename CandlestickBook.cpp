@@ -1,3 +1,5 @@
+// Start of Original Code without Assistance
+
 #include "CandlestickBook.h"
 #include "CSVReader.h"
 #include <map>
@@ -102,3 +104,5 @@ void CandlestickBook::ReduceCandlesticks(int count) {
     // Overwrite the old candlesticks with the new candlesticks.
     candlesticks = csb;
 }
+
+// End of Original Code without Assistance

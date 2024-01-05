@@ -33,6 +33,8 @@ std::vector<OrderBookEntry> CSVReader::readCSV(std::string csvFilename)
     return entries;
 }
 
+// Start of Original Code without Assistance
+
 /**
  * @brief Read a CSV file and return a vector of Candlesticks
  *
@@ -68,6 +70,8 @@ std::vector<Candlestick> CSVReader::readCSV(std::string csvFilename, std::string
     return entries;
 }
 
+// End of Original Code without Assistance
+
 std::vector<std::string> CSVReader::tokenise(std::string csvLine, char separator)
 {
     std::vector<std::string> tokens;
@@ -89,6 +93,8 @@ std::vector<std::string> CSVReader::tokenise(std::string csvLine, char separator
 
     return tokens;
 }
+
+// Start of Original Code without Assistance
 
 /**
  * @brief Convert a vector of strings into a Candlestick Object.
@@ -127,6 +133,8 @@ Candlestick CSVReader::stringsToCS(std::vector<std::string> tokens, std::string 
 
     return cs;
 }
+
+// End of Original Code without Assistance
 
 OrderBookEntry CSVReader::stringsToOBE(std::vector<std::string> tokens)
 {

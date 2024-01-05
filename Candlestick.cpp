@@ -1,3 +1,4 @@
+// Start of Original Code without Assistance
 #include <vector>
 #include <iostream>
 
@@ -159,3 +160,4 @@ double Candlestick::computeLowPrice(std::vector<OrderBookEntry> &orders)
     // Return Low value
     return low;
 }
+// End of Original Code without Assistance

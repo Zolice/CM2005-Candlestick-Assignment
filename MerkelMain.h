@@ -23,6 +23,8 @@ private:
     void printWallet();
     void gotoNextTimeframe();
     int getUserOption();
+
+    // Start of Original Code without Assistance
     void computeCandlesticks(int candlesticksPerProduct);
     void computeCustomCandlesticks(); // int candlesticksPerProduct
     void printProgress(int progress, int total, bool firsIteration);
@@ -30,17 +32,21 @@ private:
     void requestCustomCandlesticks();
     void drawCandlesticks(std::vector<Candlestick> candlesticks);
     void writeToFile(const std::vector<std::string> &data, const std::string &filename);
+    // End of Original Code without Assistance
+
     void processUserOption(int userOption);
 
     std::string currentTime;
 
     // OrderBook orderBook{"20200317.csv"};
     OrderBook orderBook{"20200601.csv"};
+
+    // Start of Original Code without Assistance
+    std::vector<std::vector<Candlestick>> candlesticks;
+    std::vector<Candlestick> backup;
     CandlestickBook candlestickBook{"WEOS-USD.csv"};
+    // End of Original Code without Assistance
+
     Wallet wallet;
 
-    std::vector<std::vector<Candlestick>> candlesticks;
-    // std::vector<Candlestick> customCandlesticks;
-
-    std::vector<Candlestick> backup;
 };

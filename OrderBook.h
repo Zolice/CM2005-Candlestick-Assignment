@@ -25,7 +25,9 @@ public:
      * */
     std::string getNextTime(std::string timestamp);
 
+    // Start of Original Code without Assistance
     int getTotalTimestampCount();
+    // End of Original Code without Assistance
 
     void insertOrder(OrderBookEntry &order);
 
@@ -34,8 +36,10 @@ public:
     static double getHighPrice(std::vector<OrderBookEntry> &orders);
     static double getLowPrice(std::vector<OrderBookEntry> &orders);
 
+    // Start of Original Code without Assistance
     int totalTimestampCount;
     std::set<std::string> allTimestamps;
+    // End of Original Code without Assistance
 
 private:
     std::vector<OrderBookEntry> orders;

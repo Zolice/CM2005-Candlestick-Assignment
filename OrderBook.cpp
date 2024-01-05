@@ -95,6 +95,8 @@ std::string OrderBook::getNextTime(std::string timestamp)
     return next_timestamp;
 }
 
+// Start of Original Code without Assistance
+
 /**
  * @brief Get the number of unique timestamps in the order book.
  * Additionally, store the timestamps in a set `allTimestamps` for later use.
@@ -114,6 +116,8 @@ int OrderBook::getTotalTimestampCount()
 
     return allTimestamps.size();
 }
+
+// End of Original Code without Assistance
 
 void OrderBook::insertOrder(OrderBookEntry &order)
 {

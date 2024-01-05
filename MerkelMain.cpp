@@ -30,27 +30,7 @@ void MerkelMain::init()
 
 void MerkelMain::printMenu()
 {
-	// 1 print help
-	// std::cout << "1: Print help " << std::endl;
-	// // 2 print exchange stats
-	// std::cout << "2: Print exchange stats" << std::endl;
-	// // 3 make an offer
-	// std::cout << "3: Make an offer " << std::endl;
-	// // 4 make a bid
-	// std::cout << "4: Make a bid " << std::endl;
-	// // 5 print wallet
-	// std::cout << "5: Print wallet " << std::endl;
-	// // 6 continue
-	// std::cout << "6: Continue " << std::endl;
-	// // 7: compute Candlesticks using given dataset
-	// std::cout << "7: Compute Candlesticks using given dataset (Task 1)" << std::endl;
-	// // 8: Draw Candlesticks Plot using given dataset
-	// std::cout << "8: Draw Candlesticks Plot using given dataset (Task 2)" << std::endl;
-	// // 9: Compute Candlesticks using another dataset
-	// std::cout << "9: Compute Candlesticks using another dataset (Task 3)" << std::endl;
-	// // 10: Draw Candlesticks Graph using another dataset
-	// std::cout << "10: Draw Candlesticks Graph using another dataset (Task 3)" << std::endl;
-
+	// Start of Original Code without Assistance
 	std::cout << std::endl; // Leave a line in the console.
 	std::cout << "Menu:" << std::endl;
 	std::cout << "1: Print help                                           		2: Print exchange stats" << std::endl;
@@ -58,9 +38,7 @@ void MerkelMain::printMenu()
 	std::cout << "5: Print wallet                                         		6: Continue" << std::endl;
 	std::cout << "7: Compute Candlesticks using given dataset (Task 1)    		8: Draw Candlesticks Plot using given dataset (Task 2)" << std::endl;
 	std::cout << "9: Compute Candlesticks using another dataset (Task 3)  		10: Draw Candlesticks Graph using another dataset (Task 3)" << std::endl;
-
-	// Avoid printing current time here as it isn't updated. s
-	// std::cout << "Current time is: " << currentTime << std::endl;
+	// End of Original Code without Assistance
 }
 
 void MerkelMain::printHelp()
@@ -79,21 +57,6 @@ void MerkelMain::printMarketStats()
 		std::cout << "Max ask: " << OrderBook::getHighPrice(entries) << std::endl;
 		std::cout << "Min ask: " << OrderBook::getLowPrice(entries) << std::endl;
 	}
-	// std::cout << "OrderBook contains :  " << orders.size() << " entries" << std::endl;
-	// unsigned int bids = 0;
-	// unsigned int asks = 0;
-	// for (OrderBookEntry& e : orders)
-	// {
-	//     if (e.orderType == OrderBookType::ask)
-	//     {
-	//         asks ++;
-	//     }
-	//     if (e.orderType == OrderBookType::bid)
-	//     {
-	//         bids ++;
-	//     }
-	// }
-	// std::cout << "OrderBook asks:  " << asks << " bids:" << bids << std::endl;
 }
 
 void MerkelMain::enterAsk()
@@ -201,6 +164,8 @@ void MerkelMain::gotoNextTimeframe()
 
 	currentTime = orderBook.getNextTime(currentTime);
 }
+
+// Start of Original Code without Assistance
 
 /**
  * @brief Computes the Candlesticks for each product, for each timeframe.
@@ -957,6 +922,8 @@ void MerkelMain::writeToFile(const std::vector<std::string> &data, const std::st
 		std::cerr << "Unable to open file: " << filename << std::endl;
 	}
 }
+
+// End of Original Code without Assistance
 
 int MerkelMain::getUserOption()
 {

@@ -1,3 +1,5 @@
+// Start of Original Code without Assistance
+
 #pragma once
 
 #include <vector>
@@ -38,3 +40,5 @@ private:
     double computeHighPrice(std::vector<OrderBookEntry> &orders);
     double computeLowPrice(std::vector<OrderBookEntry> &orders);
 };
+
+// End of Original Code without Assistance
