@@ -48,5 +48,4 @@ private:
     // End of Original Code without Assistance
 
     Wallet wallet;
-
 };

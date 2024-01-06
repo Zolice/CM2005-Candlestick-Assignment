@@ -10,32 +10,32 @@
 class Candlestick
 {
 public:
-    std::string timestamp;
-    std::string product;
-    OrderBookType orderType;
+	std::string timestamp;
+	std::string product;
+	OrderBookType orderType;
 
-    double open;
-    double close;
-    double high;
-    double low;
-    double volume;
+	double open;
+	double close;
+	double high;
+	double low;
+	double volume;
 
-    Candlestick();
+	Candlestick();
 
-    Candlestick(std::vector<OrderBookEntry> &orders);
+	Candlestick(std::vector<OrderBookEntry> &orders);
 
-    void setValues(double open, double close, double high, double low, double volume, std::string timestamp, std::string product, OrderBookType orderType);
+	void setValues(double open, double close, double high, double low, double volume, std::string timestamp, std::string product, OrderBookType orderType);
 
-    void addOrders(std::vector<OrderBookEntry> &orders);
+	void addOrders(std::vector<OrderBookEntry> &orders);
 
-    void printInformation(); 
+	void printInformation();
 
-    void setOpenPrice(double openPrice);
+	void setOpenPrice(double openPrice);
 
 private:
-    double computeClosePrice(std::vector<OrderBookEntry> &orders);
-    double computeHighPrice(std::vector<OrderBookEntry> &orders);
-    double computeLowPrice(std::vector<OrderBookEntry> &orders);
+	double computeClosePrice(std::vector<OrderBookEntry> &orders);
+	double computeHighPrice(std::vector<OrderBookEntry> &orders);
+	double computeLowPrice(std::vector<OrderBookEntry> &orders);
 };
 
 // End of Original Code without Assistance

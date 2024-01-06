@@ -21,13 +21,13 @@ public:
 
     int getTotalTimestampCount();
 
-    void ReduceCandlesticks(int count); 
+    void ReduceCandlesticks(int count);
 
     std::vector<Candlestick> candlesticks;
     int totalTimestampCount;
     std::set<std::string> allTimestamps;
 
-    private: 
+private:
 };
 
 // End of Original Code without Assistance
