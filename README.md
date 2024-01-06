@@ -1,7 +1,3 @@
-<!-- To easily change the links embedded, replace all `https://github.com/Zolice/CM2005-Candlestick-Assignment` with your GitHub Repository -->
-<!-- Change the names and content inside this document before committing. -->
-
-
 <div id="top" align="center">
 
   <h1 align="center">CM2005-Candlestick-Assignment</h1>
@@ -72,6 +68,14 @@ _Refer here for more information_
 - [x] Originality and challenge of implementation
 
 <p align="right"><a href="#top">back to top</a></p>
+
+## Video Demonstration
+The following is a video demonstration of my project, as per the requirements.
+
+[Video Demonstration](./docs/Video%20Demonstration.mp4)
+
+### Watch on YouTube
+[![YouTube Video Demonstration](http://img.youtube.com/vi/WCNgAh1k-oQ/0.jpg)](http://www.youtube.com/watch?v=WCNgAh1k-oQ "CM2005 Candlestick Assignment")
 
 # License
 Distributed under the GPL License. See <a href="https://github.com/Zolice/CM2005-Candlestick-Assignment/LICENSE">License</a> for more information.
