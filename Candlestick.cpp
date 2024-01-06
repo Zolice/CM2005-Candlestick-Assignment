@@ -69,17 +69,6 @@ void Candlestick::setOpenPrice(double openPrice)
 }
 
 /**
- * @brief Calculates the average price per unit in the previous time frame.
- * Call this if Open price needs to be recalculated.
- *
- * @return Open Price
- */
-double Candlestick::computeOpenPrice(std::vector<OrderBookEntry> &orders)
-{
-    return 0.0;
-}
-
-/**
  * @brief Calculates the average price per unit in the current time frame.
  * Call this if Close price needs to be recalculated.
  *

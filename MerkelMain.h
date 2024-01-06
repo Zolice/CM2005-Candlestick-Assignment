@@ -25,7 +25,7 @@ private:
     int getUserOption();
 
     // Start of Original Code without Assistance
-    void computeCandlesticks(int candlesticksPerProduct);
+    void computeCandlesticks();
     void computeCustomCandlesticks(); // int candlesticksPerProduct
     void printProgress(int progress, int total, bool firsIteration);
     void requestCandlesticks();

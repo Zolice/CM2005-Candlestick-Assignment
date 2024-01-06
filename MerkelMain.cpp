@@ -170,20 +170,38 @@ void MerkelMain::gotoNextTimeframe()
 /**
  * @brief Computes the Candlesticks for each product, for each timeframe.
  * This function will take a long time to run, as it has to loop through every product and timeframe.
- *
- * @param candlesticksPerProduct specifies the number of candlesticks to be generated per Product/ProductType.
- * If the value is set to 2, two candlesticks will be created for each distinct Product/ProductType.
- * This parameter controls the granularity of the candlestick generation, influencing the number of
- * candlesticks associated with each unique Product/ProductType.
  */
-void MerkelMain::computeCandlesticks(int candlesticksPerProduct)
+void MerkelMain::computeCandlesticks()
 {
-	// Check if the user wants to compute Candlesticks.
-	std::cout << "\nThis function will take a long time to run. " << std::endl;
-	std::cout << "Confirm? (Y/N): ";
+	// Get the number of candlesticks per product from user
+	int candlesticksPerProduct;
+	std::cout << "\nPlease pick the number of Candlesticks to be generated. We recommend a maximum of 15.\nEnter the number of Candlesticks to be generated per Product/ProductType: ";
 
 	// Get user input
 	std::string input;
+	std::getline(std::cin, input);
+	try
+	{
+		candlesticksPerProduct = std::stoi(input);
+	}
+	catch (const std::exception &e)
+	{
+		std::cout << "Invalid input!" << std::endl;
+		return;
+	}
+
+	if(candlesticksPerProduct > 15)
+	{
+		std::cout << "Value should not be more than 15. Please try agian." << std::endl;
+		return;
+	}
+
+	// Check if the user wants to compute Candlesticks.
+	std::cout
+		<< "\nThis function will take a long time to run. " << std::endl;
+	std::cout << "Confirm? (Y/N): ";
+
+	// Get user input
 	std::getline(std::cin, input);
 
 	// Check if the user wants to compute Candlesticks.
@@ -339,7 +357,7 @@ void MerkelMain::computeCustomCandlesticks()
 	}
 
 	// Ask the user for the number of Candlesticks to be generated
-	std::cout << "\nEnter the number of Candlesticks to be generated: ";
+	std::cout << "\nPlease pick the number of Candlesticks to be generated. We recommend a maximum of 15.\nEnter the number of Candlesticks to be generated: ";
 
 	std::cout << candlestickBook.candlesticks.size() << std::endl;
 
@@ -360,10 +378,10 @@ void MerkelMain::computeCustomCandlesticks()
 	// Adjust the CandlestickBook to contain the desired number of Candlesticks
 	candlestickBook.ReduceCandlesticks(candlesticksPerProduct);
 
-	for (Candlestick &cs : candlestickBook.candlesticks)
-	{
-		cs.printInformation();
-	}
+	// for (Candlestick &cs : candlestickBook.candlesticks)
+	// {
+	// 	cs.printInformation();
+	// }
 }
 
 /**
@@ -436,7 +454,7 @@ void MerkelMain::requestCandlesticks()
 		if (input == "Y" || input == "y")
 		{
 			// Compute Candlesticks
-			computeCandlesticks(5);
+			computeCandlesticks();
 		}
 		else
 		{
@@ -539,7 +557,7 @@ void MerkelMain::drawCandlesticks(std::vector<Candlestick> candlesticks)
 		return;
 	}
 
-	if (candlesticks.size() >= 15)
+	if (candlesticks.size() >= 30)
 	{
 		std::cout << "Too many candlesticks to display!" << std::endl;
 		return;
@@ -975,7 +993,7 @@ void MerkelMain::processUserOption(int userOption)
 	}
 	if (userOption == 7)
 	{
-		computeCandlesticks(5);
+		computeCandlesticks();
 	}
 	if (userOption == 8)
 	{
