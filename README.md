@@ -82,6 +82,7 @@ Distributed under the GPL License. See <a href="https://github.com/Zolice/CM2005
 
 ## External Sources Utilized
 - Information Taught by [University of London (Coursera)](https://www.london.ac.uk/)
+- External Dataset provided by [Yahoo Finance](https://sg.finance.yahoo.com/)
 
 ## Tools Utilized
 - <a href="https://github.com/"><img src="https://img.shields.io/badge/GitHub-black?style=for-the-badge&logo=github&logoColor=white" alt="github"></a>

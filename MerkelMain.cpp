@@ -359,8 +359,6 @@ void MerkelMain::computeCustomCandlesticks()
 	// Ask the user for the number of Candlesticks to be generated
 	std::cout << "\nPlease pick the number of Candlesticks to be generated. We recommend a maximum of 15.\nEnter the number of Candlesticks to be generated: ";
 
-	std::cout << candlestickBook.candlesticks.size() << std::endl;
-
 	// Get user input
 	std::string input;
 	std::getline(std::cin, input);
@@ -378,10 +376,7 @@ void MerkelMain::computeCustomCandlesticks()
 	// Adjust the CandlestickBook to contain the desired number of Candlesticks
 	candlestickBook.ReduceCandlesticks(candlesticksPerProduct);
 
-	// for (Candlestick &cs : candlestickBook.candlesticks)
-	// {
-	// 	cs.printInformation();
-	// }
+	std::cout << "Candlesticks computed successfully! Total of " << candlestickBook.candlesticks.size() << " Candlesticks generated." << std::endl;
 }
 
 /**
@@ -519,6 +514,31 @@ void MerkelMain::requestCustomCandlesticks()
 
 		// Check if the user wants to compute Candlesticks.
 		std::cout << "Compute Candlesticks first? (Y/N): ";
+
+		// Get user input
+		std::string input;
+		std::getline(std::cin, input);
+
+		// Check if the user wants to compute Candlesticks.
+		if (input == "Y" || input == "y")
+		{
+			// Compute Candlesticks
+			computeCustomCandlesticks();
+		}
+		else
+		{
+			// Return to main menu
+			return;
+		}
+	}
+
+	// Check if there are too many Candlesticks to display.
+	if (candlestickBook.candlesticks.size() >= 30)
+	{
+		std::cout << "\nToo many candlesticks to display!" << std::endl;
+
+		// Check if the user wants to recompute Candlesticks.
+		std::cout << "Re-compute Candlesticks first? (Y/N): ";
 
 		// Get user input
 		std::string input;
@@ -912,6 +932,9 @@ void MerkelMain::drawCandlesticks(std::vector<Candlestick> candlesticks)
 
 	// Save the display array into a file
 	writeToFile(display, "Candlesticks.txt");
+
+	// Inform the user to check the file for the text-plot
+	std::cout << "\nCandlesticks drawn successfully!\nIf the above looks incorrect, please open Candlesticks.txt for the text-plot." << std::endl;
 }
 
 /**
