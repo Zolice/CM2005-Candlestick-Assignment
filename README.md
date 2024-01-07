@@ -75,7 +75,7 @@ The following is a video demonstration of my project, as per the requirements.
 [Video Demonstration](./docs/Video%20Demonstration.mp4)
 
 ### Watch on YouTube
-[![YouTube Video Demonstration](http://img.youtube.com/vi/WCNgAh1k-oQ/0.jpg)](http://www.youtube.com/watch?v=WCNgAh1k-oQ "CM2005 Candlestick Assignment")
+[![YouTube Video Demonstration](http://img.youtube.com/vi/_0CewFmyCv4/0.jpg)](http://www.youtube.com/watch?v=_0CewFmyCv4 "CM2005 Candlestick Assignment")
 
 # License
 Distributed under the GPL License. See <a href="https://github.com/Zolice/CM2005-Candlestick-Assignment/LICENSE">License</a> for more information.
